@@ -5,20 +5,21 @@
  * Copyright (C) 2015  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
+ * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_model('divisa.php');
+require_model('impuesto.php');
 require_model('pais.php');
 
 /**
@@ -76,6 +77,24 @@ class admin_panama extends fs_controller
             {
                $this->new_message('Datos guardados correctamente.');
             }
+         }
+         else if($_GET['opcion'] == 'impuestos')
+         {
+            /// eliminamos todos los impuestos
+            $impuesto = new impuesto();
+            foreach($impuesto->all() as $imp)
+            {
+               $imp->delete();
+            }
+            
+            /// añadimos el ITBMS
+            $imp1 = new impuesto();
+            $imp1->codimpuesto = 'ITBMS';
+            $imp1->descripcion = 'ITBMS 7%';
+            $imp1->iva = 7;
+            $imp1->save();
+            
+            $this->new_message('Impuestos modificados correctamente.');
          }
       }
    }
